@@ -36,20 +36,20 @@
     hr {
         margin: 20px auto;
     }
-    .blog + .blog {
+    .art + .art {
         margin-top: 20px;
     }
-    .blog-title {
+    .art-title {
         font-weight: bold;
         font-size: 20px;
     }
-    .blog-body {
+    .art-body {
         margin: 0;
         font-size: 17px;
     }
     </style>
     <body>
-        <h1>KW Blog<h1>
+        <h1>Kw Blog<h1>
         <form method="post">
             <label>
                 <div>title</div>
@@ -57,8 +57,8 @@
             </label>
 
             <label>
-                <div>blog post</div>
-                <textarea name="blog">{{blog}}</textarea>
+                <div>blog content</div>
+                <textarea name="art">{{art}}</textarea>
             </label>
 
             <div class="error">{{error}}</div>
@@ -66,11 +66,10 @@
             <input type="submit">
         </form>
         <hr>
-
-        {% for blog in blogs %}
-            <div class="blog">
-                <div class="blog-title">{{blog.title}}</div>
-                <pre class="blog-body">{{blog.art}}</pre>
+        {% for art in arts %}
+            <div class="art">
+                <div class="art-title">{{art.title}}</div>
+                <pre class="art-body">{{art.art}}</pre>
             </div>
             {% endfor %}
 
