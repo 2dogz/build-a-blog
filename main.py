@@ -32,8 +32,6 @@ class MainPage(Handler):
 
     def get(self):
         self.render_front()
-
-
     def post(self):
         title = self.request.get("title")
         art = self.request.get("art")
@@ -41,10 +39,25 @@ class MainPage(Handler):
         if title and art:
             a = Art(title = title, art = art)
             a.put()
-            self.redirect('/')
+            self.redirect('/blog')
         else:
             error = "we need both a title and some content!"
             self.render_front(title, art, error = error)
 
+class BlogPage(MainPage):
+    """handles request in the /blog part of my site"""
+    def render_blog(self, title="", art="", error=""):
+        arts = db.GqlQuery("SELECT * FROM Art "
+                            "ORDER BY created DESC "
+                            "Limit 5;")
+        self.render("blog.html", title=title, art=art, error=error, arts=arts)
 
-app = webapp2.WSGIApplication([('/', MainPage)], debug=True)
+    def get(self):
+        self.render_blog()
+
+
+
+app = webapp2.WSGIApplication([
+    ('/', MainPage),
+    ('/blog', BlogPage)
+], debug=True)
