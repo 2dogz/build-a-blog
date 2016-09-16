@@ -24,6 +24,9 @@ class Art(db.Model):
     created = db.DateTimeProperty(auto_now_add = True)
 
 class MainPage(Handler):
+    def get(self):
+        self.redirect('/newpost')
+class NewPost(MainPage):
     def render_front(self, title="", art="", error=""):
         arts = db.GqlQuery("SELECT * FROM Art "
                             "ORDER BY created DESC ")
@@ -33,18 +36,18 @@ class MainPage(Handler):
     def get(self):
         self.render_front()
     def post(self):
+
         title = self.request.get("title")
         art = self.request.get("art")
 
         if title and art:
             a = Art(title = title, art = art)
             a.put()
-            self.redirect('/blog')
+            self.redirect('/blog/' + str(post_id))
         else:
             error = "we need both a title and some content!"
             self.render_front(title, art, error = error)
-
-class BlogPage(MainPage):
+class BlogPage(NewPost):
     """handles request in the /blog part of my site"""
     def render_blog(self, title="", art="", error=""):
         arts = db.GqlQuery("SELECT * FROM Art "
@@ -54,10 +57,16 @@ class BlogPage(MainPage):
 
     def get(self):
         self.render_blog()
-
-
-
+class ViewPostHandler(Handler):
+    def get(self, post_id):
+        pidi = int(post_id)
+        post = Art.get_by_id(pidi)
+        if post:
+            self.render("singlepost.html", title=post.title, art=post.art)
+        self.response.write(Art.get_by_id(pidi))
 app = webapp2.WSGIApplication([
     ('/', MainPage),
-    ('/blog', BlogPage)
+    ('/newpost', NewPost),
+    ('/blog', BlogPage),
+    webapp2.Route('/blog/<post_id:\d+>', ViewPostHandler)
 ], debug=True)
