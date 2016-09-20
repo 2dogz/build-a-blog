@@ -42,8 +42,10 @@ class NewPost(MainPage):
 
         if title and art:
             a = Art(title = title, art = art)
+            # create "a" as a new instance in DB
             a.put()
-            self.redirect('/blog/' + str(post_id))
+            id = a.key().id()
+            self.redirect("/blog/%s" % id)
         else:
             error = "we need both a title and some content!"
             self.render_front(title, art, error = error)

@@ -3,11 +3,11 @@
 {% block content %}
 
 
-    <h1>kw blog<h1>
+    
     {% for art in arts %}
         <div class="art">
-            <div class="art-title">{{art.title}}</div>
-            <a href='/blog/' {{post.key().id()}}
+
+            <h2><a href="/blog/{{ art.key().id() }}">{{ art.title }}</a></h2>
             <pre class="art-body">{{art.art}}</pre>
         </div>
     {% endfor %}
